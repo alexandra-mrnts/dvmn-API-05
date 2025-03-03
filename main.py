@@ -113,11 +113,16 @@ def get_hh_stats(languages, exlude_from_search, period, area_code):
             predicted_salary = predict_rub_salary_hh(vacancy)
             if predicted_salary:
                 salaries.append(predicted_salary)
+        if salaries:
+            average_salary = int(statistics.mean(salaries))
+        else:
+            average_salary = None
 
-        vacancies_stats[language]['vacancies_found'] = vacancies_found
-        vacancies_stats[language]['vacancies_processed'] = len(salaries)
-        if vacancies_stats[language]['vacancies_processed'] > 0:
-            vacancies_stats[language]['average_salary'] = int(statistics.mean(salaries))
+        vacancies_stats[language] = {
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': len(salaries),
+            'average_salary': average_salary
+        }
     return vacancies_stats
 
 
@@ -137,20 +142,26 @@ def get_superjob_stats(languages, professional_field_id, period, town_id, api_ke
             predicted_salary = predict_rub_salary_superJob(vacancy)
             if predicted_salary:
                 salaries.append(predicted_salary)
-        
-        vacancies_stats[language]['vacancies_found'] = vacancies_found
-        vacancies_stats[language]['vacancies_processed'] = len(salaries)
-        if vacancies_stats[language]['vacancies_processed'] > 0:
-            vacancies_stats[language]['average_salary'] = int(statistics.mean(salaries))
+        if salaries:
+            average_salary = int(statistics.mean(salaries))
+        else:
+            average_salary = None
+
+        vacancies_stats[language] = {
+            'vacancies_found': vacancies_found,
+            'vacancies_processed': len(salaries),
+            'average_salary': average_salary
+        }
     return vacancies_stats
 
 
 def print_as_table(title, headers, values):
     table_data = []
     table_data.append(headers)
-    for item in values:
-        table_data.append([item])
-        table_data[-1] += list(values[item].values())
+    for language in values:
+        table_data.append([language])
+        values_for_print = [item for item in values[language].values() if item != None]
+        table_data[-1] += values_for_print
     table = SingleTable(table_data, title)
     print(table.table)
 
