@@ -39,11 +39,11 @@ def predict_rub_salary_hh(vacancy):
 def predict_rub_salary_superJob(vacancy):
     if vacancy['currency'] != 'rub':
         return None
-    if vacancy['payment_from'] == 0:
+    if not vacancy['payment_from']:
         salary_from = None
     else:
         salary_from = vacancy['payment_from']
-    if vacancy['payment_to'] == 0:
+    if not vacancy['payment_to']:
         salary_to = None
     else:
         salary_to = vacancy['payment_to']
