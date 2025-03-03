@@ -155,13 +155,13 @@ def get_superjob_stats(languages, professional_field_id, period, town_id, api_ke
     return vacancies_stats
 
 
-def print_as_table(title, headers, values):
+def print_as_table(title, headers, table_values):
     table_data = []
     table_data.append(headers)
-    for language in values:
-        table_data.append([language])
-        values_for_print = [item for item in values[language].values() if item != None]
-        table_data[-1] += values_for_print
+    for row_title, row_values in table_values.items():
+        row = ([row_title] 
+               + ([row_value for row_value in row_values.values() if row_value is not None]))
+        table_data.append(row)
     table = SingleTable(table_data, title)
     print(table.table)
 
@@ -189,10 +189,10 @@ def main():
 
     print_as_table(title='HeadHunter Москва',
                    headers=['Язык', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата, руб'],
-                   values=hh_vacancies_stats)
+                   table_values=hh_vacancies_stats)
     print_as_table(title='SuperJob Москва',
                    headers=['Язык', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата, руб'],
-                   values=superjob_vacancies_stats)
+                   table_values=superjob_vacancies_stats)
 
 
 if __name__ == '__main__':
